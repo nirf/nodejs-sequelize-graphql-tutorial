@@ -91,14 +91,16 @@ const Query = new Graphql.GraphQLObjectType({
                         type: Graphql.GraphQLString
                     }
                 },
-                resolve (root, args) {
-                    return Db.Conn.models.person.findAll({where: args});
+                resolve(root, args) {
+                    return Db.Conn.models.person.findAll({where: args})
+                        .then((persons) => {
+                            return persons
+                        });
                 }
             },
             posts: {
                 type: new Graphql.GraphQLList(Post),
-                resolve (root, args) {
-                    Db.models.post.findall
+                resolve(root, args) {
                     return Db.Conn.models.post.findAll({where: args});
                 }
             }
@@ -112,6 +114,27 @@ const Mutation = new Graphql.GraphQLObjectType({
     fields() {
         return {
             addPerson: {
+                type: Person,
+                args: {
+                    firstName: {
+                        type: new Graphql.GraphQLNonNull(Graphql.GraphQLString)
+                    },
+                    lastName: {
+                        type: new Graphql.GraphQLNonNull(Graphql.GraphQLString)
+                    },
+                    email: {
+                        type: new Graphql.GraphQLNonNull(Graphql.GraphQLString)
+                    }
+                },
+                resolve(_, args) {
+                    return Db.Conn.models.person.create({
+                        firstName: args.firstName,
+                        lastName: args.lastName,
+                        email: args.email.toLowerCase()
+                    })
+                }
+            },
+            updatePerson: {
                 type: Person,
                 args: {
                     firstName: {

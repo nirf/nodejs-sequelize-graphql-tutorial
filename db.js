@@ -5,7 +5,7 @@ const Faker = require('faker')
 const Conn = new Sequelize(
     'myBlog',//db name
     'root',//user name
-    'whentheleveebreaks!',//password
+    '',//password
     {
         dialect: 'mysql',
         host: 'localhost'
@@ -13,6 +13,7 @@ const Conn = new Sequelize(
 )
 
 const Person = Conn.define('person', {
+
     firstName: {
         type: Sequelize.STRING,
         allowNull: false
@@ -29,9 +30,12 @@ const Person = Conn.define('person', {
             isEmail: true
         }
     }
+}, {
+    paranoid: true
 })
 
 const Post = Conn.define('post', {
+
     title: {
         type: Sequelize.STRING,
         allowNull: false
@@ -40,9 +44,10 @@ const Post = Conn.define('post', {
         type: Sequelize.STRING,
         allowNull: false
     }
+}, {
+    paranoid: true
 })
 
-console.log(typeof  Person)
 //Relationships
 Person.hasMany(Post)
 Post.belongsTo(Person)
@@ -63,5 +68,5 @@ Conn.sync({force: true}).then(() => {
 })
 
 module.exports = {
-   Conn
+    Conn
 }
