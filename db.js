@@ -5,7 +5,7 @@ const Faker = require('faker')
 const Conn = new Sequelize(
     'myBlog',//db name
     'root',//user name
-    '',//password
+    'root',//password
     {
         dialect: 'mysql',
         host: 'localhost'
